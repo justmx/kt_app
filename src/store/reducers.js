@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux'
 import locationReducer from './location'
-import counterReducer from '../routes/Counter/modules/counter'
+import userReducer from '../routes/Home/modules/user'
+import { reducer as formReducer } from 'redux-form'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
     location: locationReducer,
-    counter: counterReducer,
+    form: formReducer,
+    user: userReducer,
     ...asyncReducers
   })
 }

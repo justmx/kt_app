@@ -1,13 +1,12 @@
 import { connect } from 'react-redux'
-import { increment, doubleAsync } from '../../Counter/modules/counter'
+import { createUser } from '../modules/user'
 import HomewView from '../components/HomeView'
 
 const mapDispatchToProps = {
-  increment : () => increment(1),
-  doubleAsync
+  createUser
 }
 
 const mapStateToProps = (state) => ({
-  counter : state.counter
+  user : state.user
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HomewView)
