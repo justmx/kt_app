@@ -13,10 +13,11 @@ class App extends React.Component {
     return false
   }
 
+// fix style here
   render () {
     return (
       <Provider store={this.props.store}>
-        <div style={{ height: '100%' }}>
+        <div style={{ height: '100%', flexDirection: 'column', display: 'flex', backgroundColor: 'cornsilk' }}>
           <Router history={browserHistory} children={this.props.routes} />
         </div>
       </Provider>
