@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import StaticTextField from '../../../components/staticTextField'
 
 class Document extends Component {
   constructor (props) {
@@ -15,6 +16,15 @@ class Document extends Component {
     return (
       <div style={{ borderWidth: '1px', borderColor: 'black' }}>
         <h4>Welcome {firstName}, here is your details:</h4>
+        <div>
+          <StaticTextField label='First Name' value={firstName} horizontal />
+          <StaticTextField label='Last Name' value={lastName} horizontal />
+          <StaticTextField label='Address' value={address} horizontal />
+          <StaticTextField label='Suburb' value={suburb} horizontal />
+          <StaticTextField label='Postcode' value={postcode} horizontal />
+          <StaticTextField label='Date of Birth' value={dob} horizontal />
+          <StaticTextField label='ID' value={passport} horizontal />
+        </div>
       </div>
     )
   }
