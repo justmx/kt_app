@@ -57,7 +57,7 @@ class SignInForm extends Component {
         </Row>
         <Row>
           <Col xs={12}>
-            <Button type="submit" disabled={submitting} className="btn-md right">
+            <Button type="submit" disabled={submitting} bsStyle="primary">
               { submitting ? <i className="fa fa-refresh fa-spin fa-2x "></i> : "Submit" }
             </Button>
           </Col>
