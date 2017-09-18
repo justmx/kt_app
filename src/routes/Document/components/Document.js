@@ -8,6 +8,7 @@ import {
   Col,
   Button,
 } from 'react-bootstrap'
+import './Document.scss'
 const url = 'http://localhost:3000/api/upload'
 
 class Document extends Component {
@@ -41,7 +42,7 @@ class Document extends Component {
   renderUploadedFile = (file) => {
     return (
       <li key={file.name}>{file.name} - {file.size} bytes
-        <Button
+        <Button bsStyle='danger' bsClass='sm_btn'
           onClick={() => {
             this.deleteFile(file)
           }

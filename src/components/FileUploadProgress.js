@@ -2,6 +2,7 @@ import { EventEmitter } from 'events'
 import React from 'react'
 import PropTypes from 'prop-types'
 import objectAssign from 'object-assign'
+import axios from 'axios'
 
 const styles = {
   progressWrapper: {
@@ -141,82 +142,42 @@ class FileUploadProgress extends React.Component {
 
   _doUpload (file) {
     const form = this._getFormData()
-    const req = new XMLHttpRequest()
-    req.open('POST', this.props.url)
-    req.addEventListener('load', (e) => {
-      this.proxy.removeAllListeners(['abort'])
-      const newState = { progress: 100 }
-      if (req.status >= 200 && req.status <= 299) {
-        this.setState(newState, () => {
-          setTimeout(() => {
-            this.props.onDone(file)
-            this.setState({
-              progress: -1
-            })
-          }, 3000)
-        })
-      } else {
-        newState.hasError = true
-        this.setState(newState, () => {
-          this.props.onError(e, req)
-        })
-      }
-    }, false)
-
-    req.addEventListener('error', (e) => {
-      this.setState({
-        hasError: true,
-      }, () => {
-        this.props.onError(e, req)
-      })
-    }, false)
-
-    req.upload.addEventListener('progress', (e) => {
-      let progress = 0
-      if (e.total !== 0) {
-        progress = parseInt((e.loaded / e.total) * 100, 10)
-      }
-      this.setState({
-        progress,
-      }, () => {
-        this.props.onProgress(e, req, progress)
-      })
-    }, false)
-
-    req.addEventListener('abort', (e) => {
-      this.setState({
-        progress: -1,
-      }, () => {
-        this.props.onAbort(e, req)
-      })
-    }, false)
-
-    this.proxy.once('abort', () => {
-      req.abort()
+    let instance = axios.create({
+      baseURL: this.props.url
     })
 
-    this.props.beforeSend(req)
-              .send(this.props.formCustomizer(form))
+    let config = {
+      onUploadProgress: (progressEvent) => {
+        console.log(progressEvent.loaded)
+        var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        console.log(percentCompleted)
+        this.setState({ progress: percentCompleted })
+      }
+    }
+
+    instance.post('/user', form, config).then(response => {
+      const newState = { progress: 100 }
+      this.setState(newState, () => {
+        setTimeout(() => {
+          this.props.onDone(file)
+          this.setState({
+            progress: -1
+          })
+        }, 3000)
+      })
+    }).catch((error) => {
+      console.log(error)
+      this.setState({
+        hasError: true
+      })
+    })
   }
 }
 
 FileUploadProgress.propTypes = {
   url: PropTypes.string.isRequired,
-  formCustomizer: PropTypes.func,
-  beforeSend: PropTypes.func,
-  onProgress: PropTypes.func,
-  onError: PropTypes.func,
-  onAbort: PropTypes.func,
   onDone: PropTypes.func,
   id: PropTypes.string.isRequired
-}
-
-FileUploadProgress.defaultProps = {
-  formCustomizer: (form) => form,
-  beforeSend: (request) => request,
-  onProgress: (e, request, progress) => {},
-  onError: (e, request) => {},
-  onAbort: (e, request) => {}
 }
 
 export default FileUploadProgress
