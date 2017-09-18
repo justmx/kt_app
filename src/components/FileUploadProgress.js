@@ -82,12 +82,11 @@ class FileUploadProgress extends React.Component {
       }
 
       return (
-        <div className='_react_fileupload_progress_content'>
+        <div>
           <div style={styles.progressWrapper}>
-            <div className='_react_fileupload_progress_bar' style={barStyle} />
+            <div style={barStyle} />
           </div>
           <button
-            className='_react_fileupload_progress_cancel'
             style={styles.cancelButton}
             onClick={cancelHandler} />
           <div style={{ clear: 'left' }}>
@@ -150,7 +149,6 @@ class FileUploadProgress extends React.Component {
       onUploadProgress: (progressEvent) => {
         console.log(progressEvent.loaded)
         var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-        console.log(percentCompleted)
         this.setState({ progress: percentCompleted })
       }
     }
@@ -160,13 +158,13 @@ class FileUploadProgress extends React.Component {
       this.setState(newState, () => {
         setTimeout(() => {
           this.props.onDone(file)
+          document.getElementById(this.props.id).reset()
           this.setState({
             progress: -1
           })
         }, 3000)
       })
-    }).catch((error) => {
-      console.log(error)
+    }).catch(() => {
       this.setState({
         hasError: true
       })

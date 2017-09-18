@@ -9,6 +9,7 @@ import {
   Button,
 } from 'react-bootstrap'
 import './Document.scss'
+import filter from 'lodash/filter'
 const url = 'http://localhost:3000/api/upload'
 
 class Document extends Component {
@@ -16,22 +17,24 @@ class Document extends Component {
     super(props)
     this.state = {
       acceptedFiles: [],
-      showSupportDoc: false
+      showSupportDoc: false,
+      showErrorMessage: false
     }
   }
 
-  addFiles = (file) => {
+  addFile = (file, type) => {
     let acceptedFiles = this.state.acceptedFiles
-    acceptedFiles.push(file)
+    const acceptedFile = { file, type }
+    acceptedFiles.push(acceptedFile)
     this.setState({ acceptedFiles })
   }
 
-  addMandatoryFile = (file) => {
-    this.addFiles(file)
+  addMandatoryFile = (file, type) => {
+    this.addFile(file, type)
     this.setState({ showSupportDoc: true })
   }
 
-  deleteFile = (file) => {
+  deleteFile = (file, type) => {
     let acceptedFiles = this.state.acceptedFiles
     remove(acceptedFiles, (f) => {
       return file === f
@@ -39,26 +42,50 @@ class Document extends Component {
     this.setState({ acceptedFiles })
   }
 
-  renderUploadedFile = (file) => {
+  renderUploadedFiles = (file) => {
+    const f = file.file
     return (
-      <li key={file.name}>{file.name} - {file.size} bytes
+      <p key={f.name}>{f.name} - {f.size} bytes
         <Button bsStyle='danger' bsClass='sm_btn'
           onClick={() => {
             this.deleteFile(file)
           }
         } >
           <i className='fa fa-times' aria-hidden='true' />
-        </Button></li>
+        </Button></p>
     )
+  }
+
+  submit = () => {
+    const mfiles = this.getMandatoryFiles()
+    const sfiles = this.getSupportingFiles()
+    if (mfiles.length > 0 && sfiles.length > 0) {
+      window.alert('You have successfully submitted all required files. Back Home now')
+      this.props.router.push('/')
+    } else {
+      this.setState({ showErrorMessage: true })
+    }
+  }
+
+  getMandatoryFiles = () => {
+    return filter(this.state.acceptedFiles, { 'type': 'mandatory' })
+  }
+
+  getSupportingFiles = () => {
+    return filter(this.state.acceptedFiles, { 'type': 'support' })
   }
 
   render () {
     const { firstName, lastName, address, suburb, postcode, dob, passport } = this.props.user
-    const { acceptedFiles, showSupportDoc } = this.state
-
+    const { showSupportDoc, showErrorMessage } = this.state
+    const mfiles = this.getMandatoryFiles()
+    const sfiles = this.getSupportingFiles()
     return (
       <div style={{ borderWidth: '1px', borderColor: 'black' }}>
         <h4>Welcome {firstName}, here is your details:</h4>
+        {showErrorMessage && <h6 style={{ color: 'red' }}>
+          You have to submit Mandatory files and Supporting files to continue
+        </h6>}
         <div>
           <StaticTextField label='First Name' value={firstName} horizontal />
           <StaticTextField label='Last Name' value={lastName} horizontal />
@@ -70,37 +97,45 @@ class Document extends Component {
         </div>
         <Row>
           <Col xs={6} xsPush={3}>
-            <h6>Please upload your Passport (Other countries) file</h6>
+            <h5>Please upload your Passport (Other countries) file</h5>
             <FileUploadProgress key='mandatory_form' url={url}
               id='mandatory'
-              onDone={this.addMandatoryFile}
+              onDone={(file) => this.addMandatoryFile(file, 'mandatory')}
             />
           </Col>
         </Row>
         { showSupportDoc && <Row>
           <Col xs={6} xsPush={3}>
-            <h6>Please upload your Support file</h6>
+            <h4>Please upload your Support files</h4>
             <FileUploadProgress key='support_form' url={url}
               id='support'
-              onDone={this.addFiles}
+              onDone={(file) => this.addFile(file, 'support')}
             />
           </Col>
         </Row>}
-        <div>
-          { acceptedFiles.length > 0 && <h4>Uploaded Files: </h4>}
+        {mfiles.length > 0 && <div><h4>Uploaded Mandatory Files: </h4>
           <ul>
             {
-              acceptedFiles.map(this.renderUploadedFile)
+              mfiles.map(this.renderUploadedFiles)
             }
           </ul>
-        </div>
+        </div>}
+        { sfiles.length > 0 && <div><h4>Uploaded Supporting Files: </h4>
+          <ul>
+            {
+              sfiles.map(this.renderUploadedFiles)
+            }
+          </ul>
+        </div>}
+        <Button type='submit' bsStyle='primary' onClick={this.submit}>Submit</Button>
       </div>
     )
   }
 }
 
 Document.propTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
+  router: PropTypes.object
 }
 
 export default Document
