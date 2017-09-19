@@ -81,9 +81,9 @@ class Document extends Component {
     const mfiles = this.getMandatoryFiles()
     const sfiles = this.getSupportingFiles()
     return (
-      <div style={{ borderWidth: '1px', borderColor: 'black' }}>
+      <div style={{ borderWidth: '1px', borderColor: 'black' }} id='user_detail'>
         <h4>Welcome {firstName}, here is your details:</h4>
-        {showErrorMessage && <h6 style={{ color: 'red' }}>
+        {showErrorMessage && <h6 className='error_msg'>
           You have to submit Mandatory files and Supporting files to continue
         </h6>}
         <div>
@@ -127,7 +127,7 @@ class Document extends Component {
             }
           </ul>
         </div>}
-        <Button type='submit' bsStyle='primary' onClick={this.submit}>Submit</Button>
+        <Button type='submit' bsStyle='primary' onClick={this.submit} id='submit_button'>Submit</Button>
       </div>
     )
   }
