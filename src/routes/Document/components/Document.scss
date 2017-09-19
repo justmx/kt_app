@@ -1,8 +1,27 @@
-.sm_btn {
-  background-color: cornsilk;
-  border: none;
-}
+#user_detail {
+  background: #fff;
+  padding: 10px;
+  .sm_btn {
+    background-color: #fff;
+    border: none;
+  }
 
-.error_msg {
-  color: red;
+  .error_msg {
+    color: red;
+  }
+
+  h4, h5 {
+    border-bottom:none;
+    margin-bottom: 0px;
+  }
+
+  form {
+    background: #fff;
+    padding: 4em 4em 2em;
+    max-width: 400px;
+    margin: 50px auto 0;
+    box-shadow: none;
+    border-radius: 0px;
+    padding: 1em 1em 1em;
+  }
 }

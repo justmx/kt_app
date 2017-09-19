@@ -81,11 +81,11 @@ class Document extends Component {
     const mfiles = this.getMandatoryFiles()
     const sfiles = this.getSupportingFiles()
     return (
-      <div style={{ borderWidth: '1px', borderColor: 'black' }} id='user_detail'>
-        <h4>Welcome {firstName}, here is your details:</h4>
+      <div id='user_detail'>
+        <h2>Welcome {firstName}, here is your details:</h2>
         {showErrorMessage && <h6 className='error_msg'>
           You have to submit Mandatory files and Supporting files to continue
-        </h6>}
+          </h6>}
         <div>
           <StaticTextField label='First Name' value={firstName} horizontal />
           <StaticTextField label='Last Name' value={lastName} horizontal />
@@ -98,6 +98,7 @@ class Document extends Component {
         <Row>
           <Col xs={6} xsPush={3}>
             <h5>Please upload your Passport (Other countries) file</h5>
+            <h6>(Format: png, pdf, jpeg)</h6>
             <FileUploadProgress key='mandatory_form' url={url}
               id='mandatory'
               onDone={(file) => this.addMandatoryFile(file, 'mandatory')}

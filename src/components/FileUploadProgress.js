@@ -8,6 +8,7 @@ const styles = {
   progressWrapper: {
     height: '10px',
     marginTop: '10px',
+    marginLeft: '5px',
     width: '400px',
     float: 'left',
     overflow: 'hidden',
