@@ -12,23 +12,30 @@
 
 ## Installation
 
-After confirming that your environment meets the above [requirements](#requirements), you can create a new project based on `react-redux-starter-kit` by doing the following:
-
 ```bash
-$ git clone https://github.com/davezuko/project-name.git
-$ cd project-name
-```
-
-When that's done, install the project dependencies. It is recommended that you use [Yarn](https://yarnpkg.com/) for deterministic dependency management, but `npm install` will suffice.
-
-```bash
-$ yarn  # Install project dependencies (or `npm install`)
+$ git clone git@github.com:justmx/kt_app.git
+$ cd kt_app
+$ npm install
 ```
 
 ## Running the Project
 
-After completing the [installation](#installation) step, you're ready to start the project!
+```bash
+$ npm start
+```
+
+## Testing
 
 ```bash
-$ yarn start  # Start the development server (or `npm start`)
+$ npm test
 ```
+
+## Note
+
+1. It takes around 6 hours to get to this point.
+2. Latest version of react and redux is used in this applcation and basiclly most features are archieved including SignIn form with basic validation, file upload with progress bar showing.
+3. FileUploadProgress components should be wrapper in the redux circle and proper Mock API should be created. For now it is just a show case for deleteing files, API call should be called to remove files remotely. Testing is not fully covered and need to style the pages with better presentation.
+4. The whole app is built using a fractal structure which means each route has its own components and containers under its own folder.
+With fractal structure routes can be bundled into 'chunks' using webpack if needed. Route reducer can be lazy loaded into store when needed althoght not the case
+for this samll project.
+5. Reaact, redux, thunk to build the basic structure of the application. Redux-form to provider validations and form submit work flow. React-boostrap and react-widgets to provide basic form components and layouts.
