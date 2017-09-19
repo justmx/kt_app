@@ -29,13 +29,6 @@ export const HomeView = ({ createUser, router }) => {
       <Helmet
         title={title}
       />
-      <header>
-        <Grid fluid className=''>
-          <div className=''>
-            <h3>Please fill in your details</h3>
-          </div>
-        </Grid>
-      </header>
       <section>
         <Grid>
           <Col xs={12} sm={8} smPush={2} md={8} mdPush={3} lg={6} lgPush={3} className='siginInForm'>

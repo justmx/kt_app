@@ -4,9 +4,6 @@ import './PageLayout.scss'
 
 export const PageLayout = ({ children }) => (
   <div className='container text-center'>
-    <div className='header'>
-      <h1>Identity Form</h1>
-    </div>
     <div className='page-layout__viewport'>
       {children}
     </div>
