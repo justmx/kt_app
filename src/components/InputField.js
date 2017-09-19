@@ -11,8 +11,8 @@ export const InputField = (props) => {
   const { input, meta, lable, id } = props
   return (
     <FormGroup controlId={id}>
-      <ControlLabel>{lable}</ControlLabel>
-      <FormControl value={input.value} onChange={input.onChange} />
+      <ControlLabel className='floatLabel'>{lable}</ControlLabel>
+      <FormControl value={input.value} onChange={input.onChange} type='text'/>
       { meta.error && meta.touched &&
         <HelpBlock style={{ color: '#e41717', textAlign: 'start' }}>
           {meta.error}
