@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+// import React from 'react'
 import SignInForm from '../components/SignInForm'
 import { reduxForm } from 'redux-form'
 import { createValidator, required, postcode } from '../../../utils/form_validation'
@@ -12,8 +12,8 @@ const formValidation = createValidator({
   passport: required,
   suburb: required,
   postcode: [required, postcode],
-});
-const validation = memoize(10)(formValidation);
+})
+const validation = memoize(10)(formValidation)
 
 const SignInFormContainer = reduxForm({
   form: 'singIn',

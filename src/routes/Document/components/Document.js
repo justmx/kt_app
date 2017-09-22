@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import FileUploadProgress from '../../../components/FileUploadProgress'
+// import FileUploadProgress from '../../../components/FileUploadProgress'
+import FileUploadProgress from '../../../containers/FileUploadProgressContainer'
 import { remove } from 'lodash'
 import StaticTextField from '../../../components/StaticTextField'
 import {
@@ -10,7 +11,7 @@ import {
 } from 'react-bootstrap'
 import './Document.scss'
 import filter from 'lodash/filter'
-const url = 'http://localhost:3000/api/upload'
+// const url = 'http://localhost:3000'
 
 class Document extends Component {
   constructor (props) {
@@ -99,8 +100,7 @@ class Document extends Component {
           <Col xs={6} xsPush={3}>
             <h5>Please upload your Passport (Other countries) file</h5>
             <h6>(Format: png, pdf, jpeg)</h6>
-            <FileUploadProgress key='mandatory_form' url={url}
-              id='mandatory'
+            <FileUploadProgress key='mandatory_form'
               onDone={(file) => this.addMandatoryFile(file, 'mandatory')}
             />
           </Col>
@@ -108,8 +108,7 @@ class Document extends Component {
         { showSupportDoc && <Row>
           <Col xs={6} xsPush={3}>
             <h4>Please upload your Support files</h4>
-            <FileUploadProgress key='support_form' url={url}
-              id='support'
+            <FileUploadProgress key='support_form'
               onDone={(file) => this.addFile(file, 'support')}
             />
           </Col>

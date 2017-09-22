@@ -11,6 +11,9 @@ const __DEV__ = project.env === 'development'
 const __TEST__ = project.env === 'test'
 const __PROD__ = project.env === 'production'
 
+console.log(inProjectSrc(project.main))
+console.log(inProjectSrc('normalize'))
+
 const config = {
   entry: {
     normalize: [
@@ -23,7 +26,7 @@ const config = {
   devtool: project.sourcemaps ? 'source-map' : false,
   output: {
     path: inProject(project.outDir),
-    filename: __DEV__ ? '[name].js' : '[name].[chunkhash].js',
+    filename: '[name].js',
     publicPath: project.publicPath,
   },
   resolve: {
@@ -91,7 +94,7 @@ config.module.rules.push({
 // Styles
 // ------------------------------------
 const extractStyles = new ExtractTextPlugin({
-  filename: 'styles/[name].[contenthash].css',
+  filename: 'styles/[name].css',
   allChunks: true,
   disable: __DEV__,
 })
