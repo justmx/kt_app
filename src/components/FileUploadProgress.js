@@ -106,8 +106,7 @@ class FileUploadProgress extends React.Component {
   }
 
   render () {
-    const { percentCompleted, error, acceptedFiles } = this.props.file
-    acceptedFiles && acceptedFiles[0] && console.log(acceptedFiles[0].file)
+    const { percentCompleted, error } = this.props.file
     const progessElement = this.progressRenderer(percentCompleted, error)
     const formElement = this.formRenderer(this.onChange, progessElement, this.props.id)
     return (

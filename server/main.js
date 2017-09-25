@@ -37,8 +37,6 @@ if (project.env === 'development') {
   app.use(express.static(path.resolve(project.basePath, 'public')))
 
   app.post('/api/upload', upload.single('file'), function (req, res) {
-    console.log(req.body)
-    res.send(req.body)
     res.end('File uploaded.')
   })
 

@@ -1,5 +1,6 @@
 import { assign, filter, remove } from 'lodash'
 import axios from 'axios'
+const url = 'http://localhost:3000'
 // Constants
 // ------------------------------------
 export const UPLOAD_FILE_SUCCESS = 'UPLOAD_FILE_SUCCESS'
@@ -12,14 +13,15 @@ export const RESET_FILES = 'RESET_FILES'
 
 export const uploadDocumentRequest = (fileInfo) => {
   const { file } = fileInfo
+  let data = new FormData()
+  data.append('file', file)
   return (dispatch) => {
     let instance = axios.create({
-      baseURL: 'http://localhost:3000'
+      baseURL: url
     })
 
     let config = {
       onUploadProgress: (progressEvent) => {
-        console.log(progressEvent.loaded)
         var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
         dispatch({
           type: 'LOAD_RECEIVED',
@@ -28,7 +30,7 @@ export const uploadDocumentRequest = (fileInfo) => {
       }
     }
 
-    instance.post('/api/upload', file, config).then(response => {
+    instance.post('/api/upload', data, config).then(response => {
       dispatch({ type: 'UPLOAD_FILE_SUCCESS',
         file: fileInfo
       })
@@ -101,7 +103,7 @@ const ACTION_HANDLERS = {
   [LOAD_RECEIVED] : (state, action) => { return assign({}, state, action.percentCompleted) },
   [LOAD_RESET]: (state, action) => { return assign({}, state, { percentCompleted: -1 }) },
   [REMOVE_FILE]: handleRemoveFile,
-  [RESET_FILES]: (state, action) => { return initialState }
+  [RESET_FILES]: (state, action) => { return assign({}, state, { acceptedFiles: [] }) }
 }
 
 // ------------------------------------
