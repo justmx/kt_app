@@ -1,22 +1,17 @@
-import { assign, filter } from 'lodash'
+import { assign, filter, remove } from 'lodash'
 import axios from 'axios'
 // Constants
 // ------------------------------------
 export const UPLOAD_FILE_SUCCESS = 'UPLOAD_FILE_SUCCESS'
 export const REQUEST_FILE_UPLOAD = 'REQUEST_FILE_UPLOAD'
 export const LOAD_RECEIVED = 'LOAD_RECEIVED'
+export const LOAD_RESET = 'LOAD_RESET'
+export const REMOVE_FILE = 'REMOVE_FILE'
 export const UPLOAD_FILE_FAILURE = 'UPLOAD_FILE_FAILURE'
+export const RESET_FILES = 'RESET_FILES'
 
 export const uploadDocumentRequest = (fileInfo) => {
-  console.log(fileInfo)
-  let data = new FormData()
   const { file } = fileInfo
-  console.log(file)
-  data.append('file', file)
-  // data.append('name', name)
-  console.log(data)
-  // data.append('name', name);
-
   return (dispatch) => {
     let instance = axios.create({
       baseURL: 'http://localhost:3000'
@@ -46,8 +41,31 @@ export const uploadDocumentRequest = (fileInfo) => {
   }
 }
 
+export const deleteFile = (file) => {
+  return (dispatch) => {
+    dispatch({ type: 'REMOVE_FILE',
+      file
+    })
+  }
+}
+
+export const resetLoading = () => {
+  return (dispatch) => {
+    dispatch({ type: 'LOAD_RESET' })
+  }
+}
+
+export const resetFiles = () => {
+  return (dispatch) => {
+    dispatch({ type: 'RESET_FILES' })
+  }
+}
+
 export const actions = {
-  uploadDocumentRequest
+  uploadDocumentRequest,
+  resetLoading,
+  deleteFile,
+  resetFiles
 }
 
 // ------------------------------------
@@ -65,11 +83,25 @@ const handleSuccessUpload = (state, action) => {
   }
 }
 
+const handleRemoveFile = (state, action) => {
+  let acceptedFiles = state.acceptedFiles
+  remove(acceptedFiles, (f) => {
+    return action.file === f
+  })
+  return {
+    ...state,
+    acceptedFiles
+  }
+}
+
 const ACTION_HANDLERS = {
   [UPLOAD_FILE_SUCCESS] : handleSuccessUpload,
   [UPLOAD_FILE_FAILURE] : (state, action) => { return assign({}, action.error, { isLoading: false }) },
   [REQUEST_FILE_UPLOAD] : (state, action) => { return assign({}, state, { isLoading: true }) },
-  [LOAD_RECEIVED] : (state, action) => { return assign({}, state, action.percentCompleted) }
+  [LOAD_RECEIVED] : (state, action) => { return assign({}, state, action.percentCompleted) },
+  [LOAD_RESET]: (state, action) => { return assign({}, state, { percentCompleted: -1 }) },
+  [REMOVE_FILE]: handleRemoveFile,
+  [RESET_FILES]: (state, action) => { return initialState }
 }
 
 // ------------------------------------

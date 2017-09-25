@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import FileUploadProgress from '../../../components/FileUploadProgress'
 import FileUploadProgress from '../../../containers/FileUploadProgressContainer'
-import { remove } from 'lodash'
 import StaticTextField from '../../../components/StaticTextField'
 import {
   Row,
@@ -21,33 +19,13 @@ class Document extends Component {
     }
   }
 
-  addFile = (file, type) => {
-    let acceptedFiles = this.state.acceptedFiles
-    const acceptedFile = { file, type }
-    acceptedFiles.push(acceptedFile)
-    this.setState({ acceptedFiles })
-  }
-
-  addMandatoryFile = (file, type) => {
-    this.addFile(file, type)
-    this.setState({ showSupportDoc: true })
-  }
-
-  deleteFile = (file, type) => {
-    let acceptedFiles = this.state.acceptedFiles
-    remove(acceptedFiles, (f) => {
-      return file === f
-    })
-    this.setState({ acceptedFiles })
-  }
-
   renderUploadedFiles = (file) => {
     const f = file.file
     return (
       <p key={f.name}>{f.name} - {f.size} bytes
         <Button bsStyle='danger' bsClass='sm_btn'
           onClick={() => {
-            this.deleteFile(file)
+            this.props.deleteFile(file)
           }
         } >
           <i className='fa fa-times' aria-hidden='true' />
@@ -56,10 +34,10 @@ class Document extends Component {
   }
 
   submit = () => {
-    const mfiles = this.getMandatoryFiles()
-    const sfiles = this.getSupportingFiles()
-    if (mfiles.length > 0 && sfiles.length > 0) {
+    const { supportFiles, mandatoryFiles, resetFiles } = this.props
+    if (supportFiles.length > 0 && mandatoryFiles.length > 0) {
       window.alert('You have successfully submitted all required files. Back Home now')
+      resetFiles()
       this.props.router.push('/')
     } else {
       this.setState({ showErrorMessage: true })
@@ -70,6 +48,15 @@ class Document extends Component {
     const { firstName, lastName, address, suburb, postcode, dob, passport } = this.props.user
     const { supportFiles, mandatoryFiles } = this.props
     const { showErrorMessage } = this.state
+    let type, header
+    if (mandatoryFiles.length < 1) {
+      type = 'mandatory'
+      header = 'Please upload your mandatory file(Passport Other countries) file'
+    } else {
+      type = 'support'
+      header = 'Please upload your support files'
+    }
+
     return (
       <div id='user_detail'>
         <h2>Welcome {firstName}, here is your details:</h2>
@@ -87,21 +74,13 @@ class Document extends Component {
         </div>
         <Row>
           <Col xs={6} xsPush={3}>
-            <h5>Please upload your Passport (Other countries) file</h5>
+            <h5>{header}</h5>
             <h6>(Format: png, pdf, jpeg)</h6>
-            <FileUploadProgress type='mandatory' key='mandatory_form' id='f1'
-              onDone={(file) => this.addMandatoryFile(file, 'mandatory')}
+            <FileUploadProgress type={type}
+              key='upload_form' id='upload_form'
             />
           </Col>
         </Row>
-        {<Row>
-          <Col xs={6} xsPush={3}>
-            <h4>Please upload your Support files</h4>
-            <FileUploadProgress key='support_form' type='support' id='f2'
-              onDone={(file) => this.addFile(file, 'support')}
-            />
-          </Col>
-        </Row>}
         {mandatoryFiles.length > 0 && <div><h4>Uploaded Mandatory Files: </h4>
           <ul>
             {
@@ -127,6 +106,8 @@ Document.propTypes = {
   router: PropTypes.object,
   supportFiles: PropTypes.array,
   mandatoryFiles: PropTypes.array,
+  deleteFile: PropTypes.func,
+  resetFiles: PropTypes.func
 }
 
 export default Document

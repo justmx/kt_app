@@ -11,9 +11,6 @@ const __DEV__ = project.env === 'development'
 const __TEST__ = project.env === 'test'
 const __PROD__ = project.env === 'production'
 
-console.log(inProjectSrc(project.main))
-console.log(inProjectSrc('normalize'))
-
 const config = {
   entry: {
     normalize: [

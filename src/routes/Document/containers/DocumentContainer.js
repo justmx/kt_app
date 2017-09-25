@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
-import { mandatoryFiles, supportFiles } from '../../../store/files'
+import { mandatoryFiles, supportFiles, deleteFile, resetFiles } from '../../../store/files'
 import Document from '../components/Document'
 
 const mapDispatchToProps = {
-
+  deleteFile,
+  resetFiles
 }
 
 const mapStateToProps = (state) => ({

@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
-import { uploadDocumentRequest } from '../store/files'
-import FileUploadProgress from '../components/FileUploadProgress2'
+import { uploadDocumentRequest, resetLoading } from '../store/files'
+import FileUploadProgress from '../components/FileUploadProgress'
 
 const mapDispatchToProps = {
-  uploadDocumentRequest
+  uploadDocumentRequest,
+  resetLoading
 }
 
 const mapStateToProps = (state) => ({
