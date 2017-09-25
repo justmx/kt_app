@@ -8,13 +8,20 @@ export const userDetails = {
   passport: 'Q1234566778'
 }
 
-export const files = [
+export const supportFiles = [
+  {
+    file: { name: 'page1.pdf' },
+    type: 'support'
+  },
+  {
+    file: { name: 'page2.png' },
+    type: 'support'
+  }
+]
+
+export const mandatoryFiles = [
   {
     file: { name: 'passport.pdf' },
     type: 'mandatory'
-  },
-  {
-    file: { name: 'retal_scan.png' },
-    type: 'support'
   }
 ]

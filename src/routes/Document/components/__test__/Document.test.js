@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Document from '../Document'
-import { userDetails, files } from '../../../../utils/mockData'
+import { userDetails, mandatoryFiles, supportFiles } from '../../../../utils/mockData'
 
 const router = {
   push: jest.fn()
@@ -13,6 +13,8 @@ describe('<Document />', () => {
       <Document
         user={userDetails}
         router={router}
+        mandatoryFiles={[]}
+        supportFiles={[]}
       />
     )
     expect(wrapper.find('#user_detail').length).toBe(1)
@@ -23,6 +25,8 @@ describe('<Document />', () => {
       <Document
         user={userDetails}
         router={router}
+        mandatoryFiles={[]}
+        supportFiles={[]}
       />
     )
     wrapper.find('#submit_button').simulate('click')
@@ -38,9 +42,11 @@ describe('<Document />', () => {
       <Document
         user={userDetails}
         router={router}
+        mandatoryFiles={mandatoryFiles}
+        supportFiles={supportFiles}
+        resetFiles={jest.fn()}
       />
     )
-    wrapper.setState({ acceptedFiles: files })
     const routerProp = wrapper.instance().props.router
     const routeTo = jest.spyOn(routerProp, 'push')
     wrapper.find('#submit_button').simulate('click')
