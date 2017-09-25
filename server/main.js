@@ -5,7 +5,8 @@ const logger = require('../build/lib/logger')
 const webpackConfig = require('../build/webpack.config')
 const project = require('../project.config')
 const compress = require('compression')
-
+let multer = require('multer')
+let upload = multer({ dest: 'uploads/' })
 const app = express()
 app.use(compress())
 
@@ -34,6 +35,12 @@ if (project.env === 'development') {
   // of development since this directory will be copied into ~/dist
   // when the application is compiled.
   app.use(express.static(path.resolve(project.basePath, 'public')))
+
+  app.post('/api/upload', upload.single('file'), function (req, res) {
+    console.log(req.body)
+    res.send(req.body)
+    res.end('File uploaded.')
+  })
 
   // This rewrites all routes requests to the root /index.html file
   // (ignoring file requests). If you want to implement universal
