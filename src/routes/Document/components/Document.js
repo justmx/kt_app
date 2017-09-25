@@ -10,8 +10,6 @@ import {
   Button,
 } from 'react-bootstrap'
 import './Document.scss'
-import filter from 'lodash/filter'
-// const url = 'http://localhost:3000'
 
 class Document extends Component {
   constructor (props) {
@@ -68,19 +66,10 @@ class Document extends Component {
     }
   }
 
-  getMandatoryFiles = () => {
-    return filter(this.state.acceptedFiles, { 'type': 'mandatory' })
-  }
-
-  getSupportingFiles = () => {
-    return filter(this.state.acceptedFiles, { 'type': 'support' })
-  }
-
   render () {
     const { firstName, lastName, address, suburb, postcode, dob, passport } = this.props.user
-    const { showSupportDoc, showErrorMessage } = this.state
-    const mfiles = this.getMandatoryFiles()
-    const sfiles = this.getSupportingFiles()
+    const { supportFiles, mandatoryFiles } = this.props
+    const { showErrorMessage } = this.state
     return (
       <div id='user_detail'>
         <h2>Welcome {firstName}, here is your details:</h2>
@@ -100,30 +89,30 @@ class Document extends Component {
           <Col xs={6} xsPush={3}>
             <h5>Please upload your Passport (Other countries) file</h5>
             <h6>(Format: png, pdf, jpeg)</h6>
-            <FileUploadProgress key='mandatory_form'
+            <FileUploadProgress type='mandatory' key='mandatory_form' id='f1'
               onDone={(file) => this.addMandatoryFile(file, 'mandatory')}
             />
           </Col>
         </Row>
-        { showSupportDoc && <Row>
+        {<Row>
           <Col xs={6} xsPush={3}>
             <h4>Please upload your Support files</h4>
-            <FileUploadProgress key='support_form'
+            <FileUploadProgress key='support_form' type='support' id='f2'
               onDone={(file) => this.addFile(file, 'support')}
             />
           </Col>
         </Row>}
-        {mfiles.length > 0 && <div><h4>Uploaded Mandatory Files: </h4>
+        {mandatoryFiles.length > 0 && <div><h4>Uploaded Mandatory Files: </h4>
           <ul>
             {
-              mfiles.map(this.renderUploadedFiles)
+              mandatoryFiles.map(this.renderUploadedFiles)
             }
           </ul>
         </div>}
-        { sfiles.length > 0 && <div><h4>Uploaded Supporting Files: </h4>
+        { supportFiles.length > 0 && <div><h4>Uploaded Supporting Files: </h4>
           <ul>
             {
-              sfiles.map(this.renderUploadedFiles)
+              supportFiles.map(this.renderUploadedFiles)
             }
           </ul>
         </div>}
@@ -135,7 +124,9 @@ class Document extends Component {
 
 Document.propTypes = {
   user: PropTypes.object,
-  router: PropTypes.object
+  router: PropTypes.object,
+  supportFiles: PropTypes.array,
+  mandatoryFiles: PropTypes.array,
 }
 
 export default Document

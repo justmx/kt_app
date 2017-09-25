@@ -53,11 +53,6 @@ const styles = {
 class FileUploadProgress extends React.Component {
   constructor (props) {
     super(props)
-    // this.proxy = new EventEmitter()
-    // this.state = {
-    //   progress: -1,
-    //   hasError: false,
-    // }
   }
 
   cancelUpload = () => {
@@ -104,7 +99,7 @@ class FileUploadProgress extends React.Component {
       <div>
         <input style={{ display: 'block', alignSelf: 'center' }}
           type='file' accept='image/jpeg, image/png, application/pdf'
-          name='file1' id='file1'
+          name='file1' id={id}
           onChange={onChange}
         />
         {progressComponent}
@@ -116,18 +111,17 @@ class FileUploadProgress extends React.Component {
     e.preventDefault()
     const files = e.target.files || e.dataTransfer.files
     console.log(files[0])
+    const { type } = this.props
     this.props.uploadDocumentRequest({
       file: files[0],
-      name: 'Awesome Cat Pic'
+      type
     })
-    // this.setState({
-    //   progress: 0,
-    //   hasError: false,
-    // }, this._doUpload(files[0]))
   }
 
   render () {
-    const { percentCompleted, error } = this.props.file
+    console.log()
+    const { percentCompleted, error, acceptedFiles } = this.props.file
+    acceptedFiles && acceptedFiles[0] && console.log(acceptedFiles[0].file)
     const progessElement = this.progressRenderer(
                             percentCompleted, error, this.cancelUpload)
     const formElement = this.formRenderer(this.onChange, progessElement, this.props.id)
@@ -137,54 +131,11 @@ class FileUploadProgress extends React.Component {
       </div>
     )
   }
-
-  // _getFormData () {
-  //   if (this.props.id) {
-  //     return new FormData(document.getElementById(this.props.id))
-  //   }
-  // }
-
-  // _doUpload (file) {
-  //   // const _file = {
-  //   //   file,
-  //   //   name
-  //   // }
-  //   // const form = this._getFormData()
-  //   let instance = axios.create({
-  //     baseURL: this.props.url
-  //   })
-
-  //   let config = {
-  //     onUploadProgress: (progressEvent) => {
-  //       console.log(progressEvent.loaded)
-  //       var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-  //       this.setState({ progress: percentCompleted })
-  //     }
-  //   }
-
-  //   instance.post('/api/upload', file, config).then(response => {
-  //     const newState = { progress: 100 }
-  //     this.setState(newState, () => {
-  //       setTimeout(() => {
-  //         this.props.onDone(file)
-  //         document.getElementById(this.props.id).reset()
-  //         this.setState({
-  //           progress: -1
-  //         })
-  //       }, 3000)
-  //     })
-  //   }).catch(() => {
-  //     this.setState({
-  //       hasError: true
-  //     })
-  //   })
-  // }
 }
 
 FileUploadProgress.propTypes = {
-  // url: PropTypes.string.isRequired,
-  onDone: PropTypes.func,
-  // id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   file: PropTypes.object,
   uploadDocumentRequest: PropTypes.func
 }
